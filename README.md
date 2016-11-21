@@ -31,3 +31,18 @@ The script should return:
 "{original_data: [nil, nil, nil, nil, 91, 92, 92, 92, 92, 92, 92, 92, 92, 92, 92, 92, 92, 92, 92], prediction_data: [nil, nil, nil, nil, nil, nil, nil, nil, 91, 95, 95, 95, 95, 95, 92, 92, 92, 92, 92, 92, 92, 92, 92]}"
 
 You can now take the data and graph it :)
+
+## TWEAKING NOTES
+
+I have tested a couple of more aggressive predictor variables...
+
+Although they have less delay in predicting a high or low, they will over predict...
+
+So its basically comes down to a decision of:
+
+A) Do you prefer a faster predictor reaction but predict much lower / higher ( around 20 points off ) ?
+B) Do you prefer a slower predictor reaction but predict more accurately ( within 5 points ) ?
+
+The actual version is "B" but you can obviously move around the different variables and tweak it for your own needs.
+
+If you modify the script and make it work for A & B at the same time... PLEASE to a pull-request or add an issue explaining how you achieved it.
