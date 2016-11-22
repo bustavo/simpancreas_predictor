@@ -39,7 +39,7 @@ class SimpancreasPredictor
         if i > 0
           if (bg_array[i]-bg_array[i-1]) >= max_change
             bg_array[i] = bg_array[i-1] + max_change
-          elsif (bg_array[i]-bg_array[i-1]).abs <= -max_change
+          elsif (bg_array[i]-bg_array[i-1]) <= -max_change
             bg_array[i] = bg_array[i-1] - max_change
           end
         end
