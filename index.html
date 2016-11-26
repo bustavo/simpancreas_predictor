@@ -76,44 +76,47 @@
           // Linear predictor compartments
           for (var j = 0; j<n; j++) {
             a = a + w[j];
-            b = b + ( w[j] * ( bg_date_array[i-j] / 60000 ) );
-            c = c + ( w[j] * bg_array[i-j] );
+            b = Math.round((b + ( w[j] * ( bg_date_array[i-j] / 60000 ) ))/100)*100;
+            c = Math.round((c + ( w[j] * bg_array[i-j] ))/100)*100;
             d = b;
-            e = e + ( w[j] * ( bg_date_array[i-j] / 60000 ) * ( bg_date_array[i-j] / 60000 ) );
-            f = f + ( w[j] * bg_array[i-j] * ( bg_date_array[i-j] / 60000 ) );
+            e = Math.round((e + ( w[j] * ( bg_date_array[i-j] / 60000 ) * ( bg_date_array[i-j] / 60000 ) ))/100)*100;
+            f = Math.round((f + ( w[j] * bg_array[i-j] * ( bg_date_array[i-j] / 60000 ) ))/100)*100;
           }
           
           // I played with these changing places of variables and creating new functions. I wanted to offset a little bit the resulting "delay" in the prediction.
           if ( ( e - ( ( b * d ) / a ) ) > 0 ) {
-            speed_a = ( ( f - ( ( c * d ) / a ) ) / ( e - ( ( b * d ) / a ) ) );
+            speed_a = Math.round(( ( f - ( ( c * d ) / a ) ) / ( e - ( ( b * d ) / a ) ) )*100)/100;
           }
           
           if ( ( e - ( ( a * d ) / b ) ) > 0 ) {
-            speed_b = ( ( f - ( ( c * d ) / b ) ) / ( e - ( ( a * d ) / b ) ) );
+            speed_b = Math.round(( ( f - ( ( c * d ) / b ) ) / ( e - ( ( a * d ) / b ) ) )*100)/100;
           }
           
           if ( ( e - ( ( b * d ) / a ) ) > 0 ) {
-            speed_c = ( ( f - ( ( c * d ) / a ) ) / ( e - ( ( b * d ) / a ) ) );
+            speed_c = Math.round(( ( f - ( ( c * d ) / a ) ) / ( e - ( ( b * d ) / a ) ) )*100)/100;
           }
 
           // Resultin speed from the compartments
           speed = ( speed_a * 0.4 ) + ( speed_b * 0.6 );
-
+                    
           // This part helps make aggressive low/high predictions
           average_array_speed = ( bg_array[bg_array.length-1] - bg_array[0] );
-          
+                    
           if ( average_array_speed > 0 ) {
             bg = ( speed * ( average_array_speed ) ) + (cur_bg*1.2);
           }
-          
+                    
           if ( average_array_speed < 0 ) {
             bg = ( speed * ( average_array_speed ) ) + (cur_bg/1.5);
           }
           
+          bg = ( parseFloat(bg) * 0.3 ) + ( parseFloat( cur_bg ) * 0.7 );
+          bg = ( ( (bg) * 0.5 ) ) + ( Math.round( parseFloat(speed_c) + parseFloat(cur_bg) ) * 0.5 );
+                              
         }
         
         // Final calculated bg prediction
-        return Math.round(bg*100)/100;
+        return Math.round(bg);
         
       }
       
@@ -153,8 +156,8 @@
       // Iterate through the array and generate a prediction to be added to the output array
       for ( j = 0; j < bg_data.length; j++) {
         if ( j >= 8 ) {
-          original_data.push(bg_data[j-4])
-          prediction_data.push(bg_prediction(4,bg_data[j-4],bg_data.slice(j-8,j-4), dates.slice(j-8,j-4), dates[j-4]))
+          original_data.push(bg_data[j-5])
+          prediction_data.push(bg_prediction(4,bg_data[j-5],bg_data.slice(j-9,j-5), dates.slice(j-9,j-5), dates[j-5]))
         }        
       }
       

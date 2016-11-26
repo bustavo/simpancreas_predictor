@@ -100,7 +100,7 @@ class SimpancreasPredictor
       bg = ( speed * ( average_array_speed ) ) + (cur_bg*1.2) if average_array_speed > 0
       bg = ( speed * ( average_array_speed ) ) + (cur_bg/1.5) if average_array_speed < 0
       
-      bg = ( ( bg * 0.3 ) + ( ( cur_bg ) * 0.7) )
+      bg = ( ( bg * 0.3 ) + ( ( cur_bg ) * 0.7) )      
       bg = ( ( bg * 0.5 ) + ( ( speed_c + cur_bg ) * 0.5 ) )
       
     end
