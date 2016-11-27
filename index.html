@@ -122,27 +122,31 @@
       
     }
 
-    function get_prediction(bg_data) {
+    function get_prediction(bg_data,dates) {
       bg_data = bg_data.split(',');
+
+      // Generate dates spaced by 5 minutes if no dates are passed
+      var bg_dates = typeof dates !== undefined ? generate_dummy_date_data(bg_data) : dates;
+
       // If array is less than the minimum required data, return an error!
       if ( bg_data.length < 5 ) {
         $("#prediction").val("You need to send at least 5 data points");
       } else if ( bg_data.length < 9 ) {
-        dates = generate_dummy_date_data(bg_data);
-        $("#prediction").val(bg_prediction(4,bg_data[4],bg_data.slice(0,4),dates.slice(0,4),dates[4]));
+        // Generate predictions
+        $("#prediction").val(bg_prediction(4,bg_data[4],bg_data.slice(0,4),bg_dates.slice(0,4),bg_dates[4]));
       } else {
-        $("#prediction").val(get_predictions(bg_data));      
+        // Generate predictions
+        $("#prediction").val(get_predictions(bg_data,bg_dates));      
       }
     }
     
-    function get_predictions(bg_data) {
+    function get_predictions(bg_data,dates) {
       // Setup iteration variables
       var original_data = [];
       var prediction_data = [];
-      var dates = [];
       
-      // Generate dates spaced by 5 minutes
-      dates = generate_dummy_date_data(bg_data);
+      // Generate dates spaced by 5 minutes if no dates are passed
+      var bg_dates = typeof dates !== undefined ? generate_dummy_date_data(bg_data) : dates;
       
       // Initialize output arrays. The first data points as set as nil as they are not predictions and are useless to compare the output data ( ie predicted vs real )
       for ( i = 0; i<= 7; i++) {
@@ -157,7 +161,7 @@
       for ( j = 0; j < bg_data.length; j++) {
         if ( j >= 8 ) {
           original_data.push(bg_data[j-5])
-          prediction_data.push(bg_prediction(4,bg_data[j-5],bg_data.slice(j-9,j-5), dates.slice(j-9,j-5), dates[j-5]))
+          prediction_data.push(bg_prediction(4,bg_data[j-5],bg_data.slice(j-9,j-5), bg_dates.slice(j-9,j-5), bg_dates[j-5]))
         }        
       }
       
